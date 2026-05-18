@@ -219,7 +219,7 @@ button{cursor:pointer;font-family:var(--sans);}
    PAINEL MASTER
    ============================================================ */
 .master-shell { padding-top:64px; min-height:100vh; }
-.master-content { max-width:1200px; margin:0 auto; padding:40px 32px 80px; }
+.master-content { max-width:1300px; margin:0 auto; padding:32px 32px 0; }
 
 /* Header do painel */
 .master-header { margin-bottom:32px; }
@@ -233,7 +233,19 @@ button{cursor:pointer;font-family:var(--sans);}
 .mentor-badge.mentor { background:rgba(48,78,156,.12);color:#8aa6e8;border:1px solid rgba(48,78,156,.3); }
 
 /* Barra de busca */
-.master-search { display:flex;gap:12px;margin-bottom:24px; }
+.master-search {
+  display:flex;
+  gap:12px;
+  margin-bottom:16px;
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:var(--bg);
+  padding-bottom:12px;
+  border-bottom:1px solid var(--line);
+  margin-top:-4px;
+  padding-top:4px;
+}
 .master-search input { flex:1;padding:11px 16px;border-radius:var(--r-md);background:var(--bg-2);border:1px solid var(--line-strong);color:var(--text);font-family:var(--sans);font-size:14px;outline:none;transition:all .2s; }
 .master-search input:focus { border-color:var(--royal);box-shadow:0 0 0 4px rgba(48,78,156,.12); }
 .master-search input::placeholder { color:var(--text-muted); }
@@ -252,7 +264,16 @@ button{cursor:pointer;font-family:var(--sans);}
 .aluno-prog-pct { font-family:var(--mono);font-size:11px;color:var(--text-muted);min-width:28px; }
 
 /* Painel de edição */
-.editor-panel { background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r-xl);padding:32px;position:sticky;top:80px; }
+.editor-panel {
+  background:var(--bg-2);
+  border:1px solid var(--line);
+  border-radius:var(--r-xl);
+  padding:28px;
+  position:sticky;
+  top:0;
+  height:100%;
+  overflow-y:auto;
+}
 .editor-panel-vazio { display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;color:var(--text-muted);text-align:center;gap:12px; }
 .editor-aluno-nome { font-family:var(--serif);font-size:22px;font-weight:400;letter-spacing:-.01em;margin-bottom:4px; }
 .editor-aluno-email { font-size:12px;color:var(--text-muted);margin-bottom:24px; }
@@ -275,8 +296,23 @@ button{cursor:pointer;font-family:var(--sans);}
 .editor-save-btn:disabled { opacity:.6;cursor:not-allowed;transform:none; }
 
 /* Layout master em 2 colunas */
-.master-grid { display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:start; }
-@media(max-width:900px) { .master-grid { grid-template-columns:1fr; } .editor-panel { position:static; } }
+.master-grid {
+  display:grid;
+  grid-template-columns:1fr 420px;
+  gap:24px;
+  align-items:start;
+  height:calc(100vh - 200px);   /* altura total menos topbar + header */
+}
+.master-grid > div:first-child {
+  overflow-y:auto;
+  height:100%;
+  padding-right:4px;
+}
+@media(max-width:900px) {
+  .master-grid { grid-template-columns:1fr; height:auto; }
+  .master-grid > div:first-child { height:60vh; }
+  .editor-panel { position:static; height:auto; }
+}
 
 /* Toast */
 #masterToast { position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:var(--r-md);font-size:13px;font-weight:500;color:#fff;transform:translateY(80px);opacity:0;transition:all .3s;z-index:999;pointer-events:none; }
