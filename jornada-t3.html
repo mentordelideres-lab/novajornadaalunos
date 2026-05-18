@@ -437,7 +437,7 @@ button { cursor: pointer; font-family: var(--sans); }
       <div id="msgLogin"></div>
       <form id="loginForm">
         <div class="field"><label for="emailInput">E-mail</label><input type="email" id="emailInput" placeholder="seu@email.com" autocomplete="email" required/></div>
-        <div class="field"><label for="senhaInput">Senha</label><input type="password" id="senhaInput" placeholder="••••••••" autocomplete="current-password" required/></div>
+        <div class="field"><label for="senhaInput">Senha</label><input type="password" id="senhaInput" placeholder="••••••••" autocomplete="current-password"/></div>
         <button type="submit" class="submit-btn" id="btnLogin">Entrar na jornada <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg></button>
       </form>
       <div class="login-footer"><a onclick="mostrarEsqueci()">Esqueci minha senha</a></div>
@@ -792,6 +792,8 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     const senha = document.getElementById('senhaInput').value.trim();
     const btn = document.getElementById('btnLogin');
 
+    if (!email) { showMsg('msgLogin', 'Digite seu e-mail.', 'error'); return; }
+
     btn.disabled = true; btn.textContent = 'Verificando...';
     showMsg('msgLogin', '', '');
 
@@ -812,11 +814,13 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
             const emailPlanilha = (row.c[1].v || '').toLowerCase().trim();
             if (emailPlanilha === '' || emailPlanilha === 'e-mail' || emailPlanilha === 'e-mail') continue;
             if (emailPlanilha === email) {
-                const senhaPlani = (row.c[9]?.v || '').trim(); // coluna J = Senha
-                const nome = row.c[0]?.v || 'Aluno';
-                const nomePreferido = row.c[10]?.v || '';      // coluna K = Nome Preferido
+                // Senha: coluna J (índice 9) — null quando vazia no GViz
+                const senhaPlani = (row.c[9] && row.c[9].v) ? row.c[9].v.toString().trim() : '';
+                const nome = (row.c[0] && row.c[0].v) ? row.c[0].v.toString() : 'Aluno';
+                const nomePreferido = (row.c[10] && row.c[10].v) ? row.c[10].v.toString() : '';
+
                 if (!senhaPlani) {
-                    // Primeiro acesso
+                    // Primeiro acesso — senha vazia, redirecionar para criar senha
                     primeiroAcessoEmail = email;
                     document.getElementById('nomeAlunoCriar').textContent = (nomePreferido || nome).split(' ')[0];
                     mostrarTela('criarSenhaScreen');
@@ -827,7 +831,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
                         nome,
                         email,
                         nomeExibicao: nomePreferido || nome,
-                        arquetipo: row.c[11]?.v || ''  // coluna L = Arquétipo
+                        arquetipo: (row.c[11] && row.c[11].v) ? row.c[11].v.toString() : ''
                     };
                 }
                 break;
@@ -835,7 +839,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         }
 
         if (!encontrado) {
-            showMsg('msgLogin', 'E-mail ou senha incorretos.', 'error');
+            showMsg('msgLogin', 'E-mail não encontrado ou senha incorreta. Verifique se está usando o e-mail cadastrado no programa.', 'error');
         } else {
             alunoAtual = encontrado;
             await iniciarDashboard();
@@ -879,12 +883,16 @@ async function salvarSenha(email, senha, msgId, btnId) {
         await new Promise(r => setTimeout(r, 3000));
         const rows2 = await fetchSheet('TURMA 3');
         for (const row of rows2) {
-            if (!row.c || !row.c[1]) continue;
-            const ep = (row.c[1].v || '').toLowerCase().trim();
+            if (!row.c || !row.c[1] || !row.c[1].v) continue;
+            const ep = row.c[1].v.toString().toLowerCase().trim();
             if (ep === email) {
-                const nome = row.c[0]?.v || 'Aluno';
-                const nomePreferido = row.c[10]?.v || '';
-                alunoAtual = { nome, email, nomeExibicao: nomePreferido || nome, arquetipo: row.c[11]?.v || '' };
+                const nome = (row.c[0] && row.c[0].v) ? row.c[0].v.toString() : 'Aluno';
+                const nomePreferido = (row.c[10] && row.c[10].v) ? row.c[10].v.toString() : '';
+                alunoAtual = {
+                    nome, email,
+                    nomeExibicao: nomePreferido || nome,
+                    arquetipo: (row.c[11] && row.c[11].v) ? row.c[11].v.toString() : ''
+                };
                 break;
             }
         }
