@@ -316,7 +316,7 @@ button{cursor:pointer;font-family:var(--sans);}
   <div class="login-right">
     <div class="login-form-wrap fade-in">
       <span class="login-badge">● Turma 03 · Jornada 2026</span>
-      <h1 class="login-h1">Bem-vindo,<br/><em>líder.</em></h1>
+      <h1 class="login-h1">Bem-vindo,<br/><em>mentor.</em></h1>
       <p class="login-lead">Acesse sua jornada personalizada.</p>
       <div id="msgLogin"></div>
       <form id="loginForm" onsubmit="submeterLogin(event)">
@@ -335,9 +335,7 @@ button{cursor:pointer;font-family:var(--sans);}
         </button>
       </form>
       <div class="login-footer"><a onclick="mostrarEsqueci()">Esqueci minha senha</a></div>
-      <div style="margin-top:20px;text-align:center;padding-top:16px;border-top:1px solid var(--line)">
-        <a onclick="mostrarLoginMaster()" style="font-size:12px;color:var(--text-muted);cursor:pointer;letter-spacing:.03em">Sou da equipe →</a>
-      </div>
+
     </div>
   </div>
 </div>
@@ -569,7 +567,28 @@ async function submeterLogin(e) {
   btn.disabled = true; btn.textContent = 'Verificando...';
   showMsg('msgLogin','','');
 
+  // Detectar automaticamente se é mentor (e-mail da equipe)
+  const isMentorEmail = !!MENTORES[email];
+
   try {
+    if (isMentorEmail) {
+      // Fluxo de mentor — chama loginMentor
+      const res = await callScript({ action:'loginMentor', email, senha });
+      if (!res.ok) { showMsg('msgLogin', res.erro || 'Erro ao conectar.', 'error'); return; }
+      if (res.primeiroAcesso) {
+        emailPrimeiroAcesso = email;
+        window._loginDestino = 'master';
+        const cfg = MENTORES[email];
+        document.getElementById('nomeCriar').textContent = cfg.nome.split(' ')[0];
+        mostrarTela('criarSenhaScreen');
+        return;
+      }
+      masterAtual = { email, nome: MENTORES[email].nome, pilar: MENTORES[email].pilar, colunas: MENTORES[email].colunas };
+      iniciarPainelMaster();
+      return;
+    }
+
+    // Fluxo normal de aluno
     const res = await callScript({ action:'login', email, senha });
 
     if (!res.ok) {
@@ -1152,7 +1171,7 @@ function mostrarToast(msg, tipo) {
 function logoutMaster() {
   masterAtual = null; todosAlunos = []; alunoAtualEditor = null;
   document.querySelector('.login-badge').textContent = '● Turma 03 · Jornada 2026';
-  document.querySelector('.login-h1').innerHTML = 'Bem-vindo,<br/><em>líder.</em>';
+  document.querySelector('.login-h1').innerHTML = 'Bem-vindo,<br/><em>mentor.</em>';
   document.querySelector('.login-lead').textContent = 'Acesse sua jornada personalizada.';
   const small = document.querySelector('#loginForm small');
   if (small) small.style.display = '';
