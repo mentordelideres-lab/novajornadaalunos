@@ -598,42 +598,6 @@ async function submeterLogin(e) {
 }
 
 // ============================================================
-// CRIAR SENHA (primeiro acesso)
-// ============================================================
-async function submeterCriarSenha(e) {
-  e.preventDefault();
-  const nova     = document.getElementById('novaSenhaInput').value;
-  const confirmar= document.getElementById('confirmarInput').value;
-  const btn      = document.getElementById('btnCriar');
-
-  if (nova !== confirmar) { showMsg('msgCriar','As senhas não coincidem.','error'); return; }
-  if (nova.length < 6)    { showMsg('msgCriar','Mínimo 6 caracteres.','error'); return; }
-
-  btn.disabled = true; btn.textContent = 'Salvando...';
-  showMsg('msgCriar','','');
-
-  try {
-    const res = await callScript({ action:'salvarSenha', email: emailPrimeiroAcesso, senha: nova });
-
-    if (!res.ok) { showMsg('msgCriar', res.erro || 'Erro ao salvar.','error'); return; }
-
-    showMsg('msgCriar','✓ Senha criada! Entrando...','success');
-
-    // Buscar dados completos do aluno
-    const loginRes = await callScript({ action:'login', email: emailPrimeiroAcesso, senha: nova });
-    if (loginRes.ok && !loginRes.primeiroAcesso) {
-      alunoAtual = { nome: loginRes.nome, email: emailPrimeiroAcesso, arquetipo: loginRes.arquetipo || '' };
-      setTimeout(() => iniciarDashboard(), 1000);
-    }
-  } catch(err) {
-    showMsg('msgCriar','Erro ao salvar senha.','error');
-    console.error(err);
-  } finally {
-    btn.disabled = false; btn.textContent = 'Criar senha e entrar';
-  }
-}
-
-// ============================================================
 // DASHBOARD
 // ============================================================
 function iniciarDashboard() {
@@ -922,7 +886,8 @@ async function submeterLoginMaster(e) {
       mostrarTela('criarSenhaScreen');
       return;
     }
-    masterAtual = { email, ...MENTORES[email] };
+    const _cfg1 = MENTORES[email];
+    masterAtual = { email, nome: _cfg1.nome, pilar: _cfg1.pilar, colunas: _cfg1.colunas };
     iniciarPainelMaster();
   } catch(err) {
     showMsg('msgLogin','Erro de conexão.','error');
@@ -949,7 +914,8 @@ async function submeterCriarSenha(e) {
     if (!res.ok) { showMsg('msgCriar', res.erro || 'Erro.','error'); return; }
     showMsg('msgCriar','✓ Senha criada! Entrando...','success');
     if (isMentor) {
-      masterAtual = { email: emailPrimeiroAcesso, ...MENTORES[emailPrimeiroAcesso] };
+      const _cfg2 = MENTORES[emailPrimeiroAcesso];
+      masterAtual = { email: emailPrimeiroAcesso, nome: _cfg2.nome, pilar: _cfg2.pilar, colunas: _cfg2.colunas };
       setTimeout(() => iniciarPainelMaster(), 900);
     } else {
       const r = await callScript({ action:'login', email: emailPrimeiroAcesso, senha: nova });
@@ -1069,8 +1035,10 @@ function statusClass(s) {
 }
 
 function renderizarEditor() {
+  console.log('renderizarEditor | masterAtual:', JSON.stringify(masterAtual));
   const isMaster = masterAtual.colunas === 'all';
   const colunas  = masterAtual.colunas;
+  console.log('isMaster:', isMaster, '| colunas:', JSON.stringify(colunas));
   const mapaEtapas = [
     'Onboarding ao vivo','Formulário diagnóstico','10 dias de aulas',
     'Evento presencial','Início das tutorias','Abertura de agenda'
