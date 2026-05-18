@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Jornada Mentor de Líderes · Turma 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ============================================================
+   DESIGN SYSTEM — mesmo do dashboard principal
+   ============================================================ */
+:root {
+  --bg: #1a161c; --bg-2: #241f26; --bg-3: #2d2731; --bg-4: #38313d;
+  --line: rgba(225,228,234,.08); --line-strong: rgba(225,228,234,.16);
+  --text: #f5f3ee; --text-2: #e1e4ea; --text-dim: #bfbab7; --text-muted: #8a8390;
+  --royal: #304e9c; --royal-soft: #4a6bbd; --royal-deep: #1f3677;
+  --gold: #c9a96e; --gold-soft: #e0c896;
+  --success: #5fa776; --success-soft: rgba(95,167,118,.18);
+  --warn: #d4a85a; --warn-soft: rgba(212,168,90,.18);
+  --danger: #c87070; --danger-soft: rgba(200,112,112,.18);
+  --serif: 'Fraunces','Times New Roman',serif;
+  --sans: 'Inter Tight',-apple-system,sans-serif;
+  --mono: 'JetBrains Mono',monospace;
+  --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 24px;
+  --ease: cubic-bezier(.2,.6,.3,1);
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { overflow-x: hidden; }
+body {
+  font-family: var(--sans); background: var(--bg); color: var(--text);
+  min-height: 100vh; -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; font-family: var(--sans); }
+.hidden { display: none !important; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(225,228,234,.1); border-radius: 6px; }
+
+/* Animations */
+@keyframes fadeInUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+@keyframes spin { to { transform:rotate(360deg); } }
+@keyframes pulse { 0%,100% { opacity:.6; } 50% { opacity:1; } }
+.fade-in { animation: fadeInUp .5s var(--ease) both; }
+
+/* ============================================================
+   BOTÕES
+   ============================================================ */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 20px; border-radius: var(--r-md);
+  font-family: var(--sans); font-size: 14px; font-weight: 500;
+  border: 1px solid transparent; cursor: pointer; transition: all .2s;
+  text-decoration: none;
+}
+.btn-primary { background: var(--royal); color: white; border-color: var(--royal); box-shadow: 0 4px 16px -4px rgba(48,78,156,.5); }
+.btn-primary:hover { background: var(--royal-soft); transform: translateY(-1px); }
+.btn-primary:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+.btn-ghost { background: transparent; color: var(--text-dim); border-color: var(--line-strong); }
+.btn-ghost:hover { background: rgba(225,228,234,.05); color: var(--text); }
+.btn-gold { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+.btn-gold:hover { background: var(--gold-soft); }
+
+/* Pills */
+.pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: 99px;
+  font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+}
+.pill-muted { background: rgba(225,228,234,.06); color: var(--text-muted); border: 1px solid var(--line-strong); }
+.pill-warn { background: var(--warn-soft); color: var(--warn); border: 1px solid rgba(212,168,90,.3); }
+.pill-success { background: var(--success-soft); color: var(--success); border: 1px solid rgba(95,167,118,.3); }
+.pill-royal { background: rgba(48,78,156,.15); color: #8aa6e8; border: 1px solid rgba(48,78,156,.4); }
+.pill-gold { background: rgba(201,169,110,.12); color: var(--gold); border: 1px solid rgba(201,169,110,.3); }
+.pill-danger { background: var(--danger-soft); color: var(--danger); border: 1px solid rgba(200,112,112,.3); }
+
+/* Messages */
+.msg { padding: 12px 16px; border-radius: var(--r-md); font-size: 14px; margin-bottom: 14px; }
+.msg-error { background: var(--danger-soft); color: var(--danger); border: 1px solid rgba(200,112,112,.3); }
+.msg-success { background: var(--success-soft); color: var(--success); border: 1px solid rgba(95,167,118,.3); }
+.msg-info { background: rgba(48,78,156,.12); color: #8aa6e8; border: 1px solid rgba(48,78,156,.3); }
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
+.login-shell {
+  min-height: 100vh; display: grid; grid-template-columns: 1.1fr 1fr;
+  position: fixed; inset: 0; z-index: 9000; background: var(--bg);
+}
+@media (max-width: 860px) { .login-shell { grid-template-columns: 1fr; } .login-left { display: none; } }
+
+.login-left {
+  position: relative; overflow: hidden;
+  background: radial-gradient(ellipse at 30% 30%, rgba(48,78,156,.25), rgba(36,31,38,1) 60%);
+  display: flex; flex-direction: column; justify-content: space-between; padding: 48px;
+  border-right: 1px solid rgba(225,228,234,.06);
+}
+.login-left::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image: radial-gradient(circle at 20% 80%, rgba(201,169,110,.08), transparent 40%);
+}
+.login-brand { position: relative; z-index: 1; display: flex; align-items: center; gap: 14px; }
+.login-brand-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 16px var(--gold); flex-shrink: 0; }
+.login-hero {
+  position: relative; z-index: 1; display: grid; place-items: center; flex: 1; padding: 40px 0;
+}
+.login-hero-img {
+  width: 200px; height: 200px; border-radius: 50%; background: var(--bg-2);
+  border: 1px solid rgba(225,228,234,.15); display: grid; place-items: center;
+  font-size: 80px; line-height: 1; position: relative; z-index: 1;
+  box-shadow: 0 0 0 1px rgba(225,228,234,.1), 0 0 80px rgba(48,78,156,.3), 0 0 160px rgba(201,169,110,.12);
+  animation: lionBreath 3.5s ease-in-out infinite;
+}
+.login-hero-img img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.login-hero::before {
+  content: ''; position: absolute; width: 380px; height: 380px; border-radius: 50%;
+  border: 1.5px solid rgba(201,169,110,.45);
+  animation: ringPulse 3.5s ease-out infinite;
+}
+.login-hero::after {
+  content: ''; position: absolute; width: 380px; height: 380px; border-radius: 50%;
+  border: 1.5px solid rgba(201,169,110,.3);
+  animation: ringPulse 3.5s ease-out infinite; animation-delay: 1.15s;
+}
+@keyframes lionBreath {
+  0%,100% { box-shadow: 0 0 0 1px rgba(225,228,234,.1), 0 0 40px rgba(201,169,110,.15), inset 0 0 30px rgba(0,0,0,.5); }
+  50% { box-shadow: 0 0 0 1px rgba(201,169,110,.4), 0 0 90px rgba(201,169,110,.35), inset 0 0 30px rgba(0,0,0,.5); }
+}
+@keyframes ringPulse {
+  0% { transform: scale(.85); opacity: .7; }
+  70%,100% { transform: scale(1.3); opacity: 0; }
+}
+.login-quote { position: relative; z-index: 1; }
+.login-quote-mark { font-family: var(--serif); font-size: 64px; line-height: 1; color: var(--gold); opacity: .5; margin-bottom: -12px; }
+.login-quote p { font-family: var(--serif); font-size: 20px; line-height: 1.4; letter-spacing: -.02em; font-style: italic; color: var(--text-2); }
+.login-quote-attr { font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: var(--text-muted); margin-top: 14px; }
+
+.login-right { display: flex; align-items: center; justify-content: center; padding: 48px; }
+.login-form-wrap { width: 100%; max-width: 380px; }
+.login-badge {
+  display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 99px;
+  background: rgba(201,169,110,.1); border: 1px solid rgba(201,169,110,.3);
+  font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-bottom: 24px;
+}
+.login-h1 { font-family: var(--serif); font-size: 40px; line-height: 1.05; letter-spacing: -.025em; font-weight: 400; margin-bottom: 10px; }
+.login-h1 em { font-style: italic; color: var(--gold); }
+.login-lead { color: var(--text-dim); font-size: 15px; margin-bottom: 28px; line-height: 1.5; }
+
+.field { margin-bottom: 16px; }
+.field label { display: block; font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+.field input {
+  width: 100%; padding: 13px 16px; border-radius: var(--r-md);
+  background: rgba(225,228,234,.04); border: 1px solid var(--line-strong);
+  color: var(--text); font-family: var(--sans); font-size: 14px; outline: none; transition: all .2s;
+}
+.field input:focus { border-color: var(--royal); background: rgba(48,78,156,.08); box-shadow: 0 0 0 4px rgba(48,78,156,.12); }
+.field input::placeholder { color: var(--text-muted); }
+.submit-btn {
+  width: 100%; padding: 14px; background: var(--royal); color: white; border: none;
+  border-radius: var(--r-md); font-family: var(--sans); font-size: 14px; font-weight: 500;
+  cursor: pointer; transition: all .2s; box-shadow: 0 8px 24px -8px rgba(48,78,156,.5);
+  display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px;
+}
+.submit-btn:hover { background: var(--royal-soft); transform: translateY(-1px); }
+.submit-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+.pw-strength { height: 4px; background: rgba(225,228,234,.08); border-radius: 3px; margin-top: 6px; overflow: hidden; }
+.pw-bar { height: 100%; width: 0%; transition: all .3s; border-radius: 3px; }
+.strength-weak { background: #c87070; } .strength-medium { background: var(--warn); } .strength-strong { background: var(--success); }
+.login-footer { margin-top: 16px; font-size: 13px; color: var(--text-muted); }
+.login-footer a { color: var(--text-dim); cursor: pointer; }
+.login-footer a:hover { color: var(--text); }
+
+/* ============================================================
+   TOPBAR
+   ============================================================ */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; height: 64px;
+  background: rgba(26,22,28,.92); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--line);
+}
+.topbar-brand { display: flex; align-items: center; gap: 14px; }
+.topbar-logo {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--bg-3); border: 1px solid var(--line-strong);
+  display: grid; place-items: center; overflow: hidden; flex-shrink: 0;
+}
+.topbar-logo img { width: 100%; height: 100%; object-fit: cover; }
+.topbar-brand-name { font-family: var(--serif); font-size: 16px; letter-spacing: -.01em; line-height: 1.1; }
+.topbar-brand-sub { font-size: 10px; color: var(--text-muted); letter-spacing: .12em; text-transform: uppercase; margin-top: 2px; }
+.topbar-user { display: flex; align-items: center; gap: 10px; }
+.topbar-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--royal), var(--royal-deep));
+  display: grid; place-items: center; font-size: 12px; font-weight: 700; color: white;
+}
+.topbar-name { font-size: 13px; font-weight: 500; }
+.topbar-logout {
+  padding: 7px 14px; border-radius: var(--r-md); background: transparent;
+  border: 1px solid var(--line-strong); color: var(--text-muted);
+  font-size: 12px; cursor: pointer; transition: all .2s;
+}
+.topbar-logout:hover { background: rgba(225,228,234,.05); color: var(--text); }
+
+/* ============================================================
+   LAYOUT PRINCIPAL
+   ============================================================ */
+.main-wrap { padding-top: 64px; min-height: 100vh; }
+.content { max-width: 1100px; margin: 0 auto; padding: 48px 32px 80px; }
+@media (max-width: 768px) { .content { padding: 32px 20px 60px; } .topbar { padding: 0 20px; } }
+
+/* Tabs de navegação */
+.nav-tabs { display: flex; gap: 4px; margin-bottom: 40px; border-bottom: 1px solid var(--line); padding-bottom: 0; }
+.nav-tab {
+  padding: 10px 20px; background: transparent; border: none;
+  font-family: var(--sans); font-size: 14px; font-weight: 500;
+  color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent;
+  margin-bottom: -1px; transition: all .2s;
+}
+.nav-tab:hover { color: var(--text); }
+.nav-tab.active { color: #8aa6e8; border-bottom-color: var(--royal); }
+
+/* ============================================================
+   MAPA DO TESOURO
+   ============================================================ */
+.mapa-header { margin-bottom: 40px; }
+.mapa-eyebrow { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+.mapa-titulo { font-family: var(--serif); font-size: 42px; font-weight: 400; letter-spacing: -.025em; margin-bottom: 10px; line-height: 1.1; }
+.mapa-sub { font-size: 15px; color: var(--text-dim); max-width: 560px; line-height: 1.6; }
+
+/* Timeline */
+.timeline { position: relative; padding-left: 0; }
+.timeline-line {
+  position: absolute; left: 28px; top: 28px; bottom: 28px;
+  width: 2px; background: linear-gradient(to bottom, var(--royal) 0%, rgba(48,78,156,.1) 100%);
+  z-index: 0;
+}
+.timeline-item {
+  display: flex; gap: 24px; align-items: flex-start;
+  margin-bottom: 28px; position: relative; z-index: 1;
+  animation: fadeInUp .5s var(--ease) both;
+}
+.timeline-item:last-child { margin-bottom: 0; }
+
+/* Dot do item */
+.timeline-dot {
+  width: 58px; height: 58px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-size: 18px; font-weight: 400;
+  border: 2px solid; position: relative; z-index: 2;
+  transition: all .3s;
+}
+.timeline-dot.pendente { background: var(--bg-3); border-color: var(--line-strong); color: var(--text-muted); }
+.timeline-dot.andamento { background: rgba(48,78,156,.2); border-color: var(--royal); color: #8aa6e8; box-shadow: 0 0 20px rgba(48,78,156,.3); }
+.timeline-dot.concluido { background: var(--success-soft); border-color: var(--success); color: var(--success); }
+
+/* Card do item */
+.timeline-card {
+  flex: 1; background: var(--bg-2); border: 1px solid var(--line);
+  border-radius: var(--r-lg); padding: 22px 24px;
+  transition: all .25s var(--ease);
+}
+.timeline-card.pendente { opacity: .7; }
+.timeline-card.andamento { border-color: rgba(48,78,156,.4); background: rgba(48,78,156,.08); }
+.timeline-card.concluido { border-color: rgba(95,167,118,.3); background: rgba(95,167,118,.06); }
+.timeline-card:hover { transform: translateY(-2px); border-color: var(--line-strong); }
+.timeline-card.andamento:hover { border-color: var(--royal-soft); }
+.timeline-card.concluido:hover { border-color: var(--success); }
+
+.timeline-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+.timeline-num { font-family: var(--mono); font-size: 11px; color: var(--text-muted); }
+.timeline-date { font-family: var(--mono); font-size: 12px; color: var(--text-dim); }
+.timeline-title { font-family: var(--serif); font-size: 20px; font-weight: 400; letter-spacing: -.01em; margin-bottom: 10px; }
+.timeline-items { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+.timeline-items li {
+  font-size: 14px; color: var(--text-dim); display: flex; align-items: flex-start; gap: 8px;
+  padding: 4px 0;
+}
+.timeline-items li::before { content: '—'; color: var(--text-muted); flex-shrink: 0; font-size: 12px; margin-top: 1px; }
+
+/* Seta entre etapas */
+.timeline-arrow { display: flex; align-items: center; justify-content: center; padding: 4px 0 4px 28px; color: var(--text-muted); font-size: 18px; }
+
+/* Etapa final especial */
+.timeline-final {
+  margin-top: 8px; padding: 28px;
+  background: linear-gradient(135deg, rgba(201,169,110,.12), rgba(36,31,38,.8));
+  border: 1px solid rgba(201,169,110,.3); border-radius: var(--r-xl);
+  text-align: center;
+}
+.timeline-final-icon { font-size: 36px; margin-bottom: 12px; }
+.timeline-final-title { font-family: var(--serif); font-size: 22px; font-weight: 400; letter-spacing: -.02em; color: var(--gold); margin-bottom: 8px; }
+.timeline-final-desc { font-size: 14px; color: var(--text-dim); line-height: 1.6; }
+
+/* ============================================================
+   FASE 1 — Entregas por Pilar
+   ============================================================ */
+.fase-header { margin-bottom: 40px; }
+.fase-intro {
+  display: flex; align-items: center; gap: 16px; margin-bottom: 32px;
+  padding: 16px 20px; background: var(--bg-2); border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+}
+.fase-progresso-bar { flex: 1; }
+.fase-progresso-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+.fase-progresso-track { height: 6px; background: rgba(225,228,234,.06); border-radius: 99px; overflow: hidden; }
+.fase-progresso-fill { height: 100%; background: linear-gradient(90deg, var(--royal), var(--gold)); border-radius: 99px; transition: width .8s var(--ease); }
+.fase-progresso-pct { font-family: var(--serif); font-size: 32px; font-weight: 400; letter-spacing: -.03em; flex-shrink: 0; }
+
+/* Pilares grid */
+.pilares-grid-fase { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+@media (max-width: 700px) { .pilares-grid-fase { grid-template-columns: 1fr; } }
+
+.pilar-card-fase {
+  background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--r-lg);
+  overflow: hidden; transition: all .25s var(--ease);
+}
+.pilar-card-fase:hover { border-color: var(--line-strong); transform: translateY(-2px); }
+.pilar-card-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 18px 20px; border-bottom: 1px solid var(--line);
+  background: rgba(225,228,234,.02);
+}
+.pilar-card-icon { font-size: 22px; }
+.pilar-card-nome { font-family: var(--serif); font-size: 18px; font-weight: 400; letter-spacing: -.01em; flex: 1; }
+.pilar-card-pct { font-family: var(--mono); font-size: 12px; color: var(--text-muted); }
+
+/* Entregas */
+.entregas-list { padding: 12px 20px 16px; display: flex; flex-direction: column; gap: 6px; }
+.entrega-item {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding: 10px 12px; border-radius: var(--r-md);
+  background: rgba(225,228,234,.02); border: 1px solid var(--line);
+  transition: all .2s;
+}
+.entrega-item:hover { background: rgba(225,228,234,.04); }
+.entrega-nome { font-size: 13px; flex: 1; }
+.entrega-status { flex-shrink: 0; }
+
+/* ============================================================
+   CARDS DE STATUS NA FASE
+   ============================================================ */
+.status-map {
+  'Pendente': { class: 'pill-muted', label: 'Pendente' },
+  'Em andamento': { class: 'pill-warn', label: 'Em andamento' },
+  'Entregue': { class: 'pill-royal', label: 'Entregue' },
+  'Validado': { class: 'pill-success', label: '✓ Validado' }
+}
+
+/* ============================================================
+   ESTADO VAZIO / LOADING
+   ============================================================ */
+.loading-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px; gap: 16px; }
+.loading-spinner { width: 40px; height: 40px; border: 3px solid var(--line-strong); border-top-color: var(--royal); border-radius: 50%; animation: spin .8s linear infinite; }
+.loading-text { font-size: 14px; color: var(--text-muted); animation: pulse 1.5s ease-in-out infinite; }
+
+/* ============================================================
+   PROGRESSO GERAL (hero do painel)
+   ============================================================ */
+.hero-painel {
+  display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: center;
+  padding: 40px; margin-bottom: 40px;
+  background: linear-gradient(135deg, rgba(48,78,156,.15), rgba(36,31,38,.8) 70%);
+  border: 1px solid rgba(48,78,156,.2); border-radius: var(--r-xl);
+  position: relative; overflow: hidden;
+}
+.hero-painel::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at 20% 0%, rgba(48,78,156,.2), transparent 60%);
+}
+.hero-eyebrow { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: #8aa6e8; margin-bottom: 10px; }
+.hero-nome { font-family: var(--serif); font-size: clamp(28px,4vw,48px); font-weight: 400; letter-spacing: -.025em; margin-bottom: 8px; }
+.hero-nome em { font-style: italic; color: var(--gold); }
+.hero-turma { font-size: 14px; color: var(--text-dim); }
+
+/* Ring de progresso */
+.prog-ring-wrap { position: relative; width: 140px; height: 140px; flex-shrink: 0; }
+.prog-ring-inner { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
+.prog-ring-val { font-family: var(--serif); font-size: 36px; font-weight: 400; letter-spacing: -.03em; line-height: 1; }
+.prog-ring-label { font-family: var(--mono); font-size: 9px; color: var(--text-muted); letter-spacing: .1em; text-transform: uppercase; margin-top: 4px; }
+.ring-track { stroke: rgba(225,228,234,.08); }
+.ring-fill { stroke: var(--royal); stroke-linecap: round; transition: stroke-dashoffset .8s var(--ease); }
+@media (max-width: 600px) { .hero-painel { grid-template-columns: 1fr; } .prog-ring-wrap { display: none; } }
+
+/* ============================================================
+   MODAL — CRIAR SENHA
+   ============================================================ */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.75); z-index: 10000;
+  display: none; align-items: center; justify-content: center;
+}
+.modal-overlay.active { display: flex; }
+.modal-box {
+  background: var(--bg-2); border: 1px solid var(--line-strong);
+  border-radius: var(--r-xl); padding: 36px; max-width: 440px; width: 90%;
+  box-shadow: 0 24px 60px rgba(0,0,0,.6); animation: fadeInUp .3s var(--ease);
+}
+.modal-titulo { font-family: var(--serif); font-size: 26px; font-weight: 400; letter-spacing: -.02em; margin-bottom: 8px; }
+.modal-sub { font-size: 14px; color: var(--text-dim); margin-bottom: 24px; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<!-- ================================================================
+     LOGIN
+================================================================ -->
+<div id="loginScreen" class="login-shell">
+  <div class="login-left">
+    <div class="login-brand">
+      <span class="login-brand-dot"></span>
+      <div>
+        <div style="font-family:var(--serif);font-size:17px;letter-spacing:-.01em;line-height:1.1">Mentor de Líderes</div>
+        <div style="font-size:10px;color:var(--text-muted);letter-spacing:.15em;text-transform:uppercase;margin-top:3px">Jornada · Turma 3 · 2026</div>
+      </div>
+    </div>
+    <div class="login-hero">
+      <div class="login-hero-img">
+        <img src="lion-logo.png" alt="Mentor de Líderes" onerror="this.style.display='none';var s=document.createElement('span');s.textContent='🦁';s.style.cssText='font-size:80px;line-height:1';this.parentElement.appendChild(s)"/>
+      </div>
+    </div>
+    <div class="login-quote">
+      <div class="login-quote-mark">"</div>
+      <p id="loginQuoteText">Liderar é, antes de tudo, conhecer-se. O resto vem do alinhamento entre essência e ação.</p>
+      <div class="login-quote-attr" id="loginQuoteAuthor">— Princípio da Mentoria</div>
+    </div>
+  </div>
+  <div class="login-right">
+    <div class="login-form-wrap fade-in">
+      <span class="login-badge">● Turma 03 · Jornada 2026</span>
+      <h1 class="login-h1">Bem-vindo,<br/><em>líder.</em></h1>
+      <p class="login-lead">Acesse sua jornada personalizada.</p>
+      <div id="msgLogin"></div>
+      <form id="loginForm">
+        <div class="field"><label for="emailInput">E-mail</label><input type="email" id="emailInput" placeholder="seu@email.com" autocomplete="email" required/></div>
+        <div class="field"><label for="senhaInput">Senha</label><input type="password" id="senhaInput" placeholder="••••••••" autocomplete="current-password" required/></div>
+        <button type="submit" class="submit-btn" id="btnLogin">Entrar na jornada <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg></button>
+      </form>
+      <div class="login-footer"><a onclick="mostrarEsqueci()">Esqueci minha senha</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     CRIAR SENHA (primeiro acesso)
+================================================================ -->
+<div id="criarSenhaScreen" class="login-shell hidden">
+  <div class="login-left">
+    <div class="login-brand"><span class="login-brand-dot"></span><div><div style="font-family:var(--serif);font-size:17px;letter-spacing:-.01em">Mentor de Líderes</div><div style="font-size:10px;color:var(--text-muted);letter-spacing:.15em;text-transform:uppercase;margin-top:3px">Primeiro Acesso</div></div></div>
+    <div class="login-hero"><div class="login-hero-img"><img src="lion-logo.png" alt="" onerror="this.style.display='none';var s=document.createElement('span');s.textContent='🦁';s.style.cssText='font-size:80px';this.parentElement.appendChild(s)"/></div></div>
+    <div class="login-quote"><div class="login-quote-mark">"</div><p>Sua jornada começa agora. Crie sua senha e acesse seu painel.</p><div class="login-quote-attr">— Mentor de Líderes</div></div>
+  </div>
+  <div class="login-right">
+    <div class="login-form-wrap fade-in">
+      <span class="login-badge">● Primeiro acesso</span>
+      <h1 class="login-h1">Olá, <em><span id="nomeAlunoCriar"></span>!</em></h1>
+      <p class="login-lead">Crie uma senha segura para acessar sua jornada.</p>
+      <div id="msgCriar"></div>
+      <form id="criarSenhaForm">
+        <div class="field">
+          <label for="novaSenhaInput">Nova senha</label>
+          <input type="password" id="novaSenhaInput" placeholder="Mínimo 6 caracteres" required minlength="6" autocomplete="new-password"/>
+          <div class="pw-strength"><div class="pw-bar" id="pwBar"></div></div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:5px" id="pwText">Digite uma senha</div>
+        </div>
+        <div class="field"><label for="confirmarInput">Confirmar senha</label><input type="password" id="confirmarInput" placeholder="Repita a senha" required minlength="6" autocomplete="new-password"/></div>
+        <button type="submit" class="submit-btn" id="btnCriar">Criar senha e entrar</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     DASHBOARD DA JORNADA
+================================================================ -->
+<div id="dashJornada" class="hidden">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-logo">
+        <img src="lion-logo.png" alt="" onerror="this.style.display='none';var s=document.createElement('span');s.textContent='🦁';s.style.cssText='font-size:22px';this.parentElement.appendChild(s)"/>
+      </div>
+      <div>
+        <div class="topbar-brand-name">Mentor de Líderes</div>
+        <div class="topbar-brand-sub">Jornada · Turma 3</div>
+      </div>
+    </div>
+    <div class="topbar-user">
+      <div class="topbar-avatar" id="topbarAvatar">?</div>
+      <div class="topbar-name" id="topbarNome"></div>
+      <button class="topbar-logout" onclick="logout()">Sair</button>
+    </div>
+  </header>
+
+  <div class="main-wrap">
+    <div class="content">
+
+      <!-- Hero -->
+      <div class="hero-painel fade-in">
+        <div style="position:relative">
+          <div class="hero-eyebrow" id="heroEyebrow">Turma 3 · 2026</div>
+          <h1 class="hero-nome">Bem-vindo de volta,<br/><em id="heroNome">líder</em><span style="color:var(--gold)">.</span></h1>
+          <div class="hero-turma">Sua jornada personalizada de 12 meses</div>
+        </div>
+        <div class="prog-ring-wrap">
+          <svg width="140" height="140" viewBox="0 0 140 140" style="transform:rotate(-90deg)">
+            <circle cx="70" cy="70" r="54" fill="none" class="ring-track" stroke-width="6"/>
+            <circle cx="70" cy="70" r="54" fill="none" class="ring-fill" stroke-width="6" stroke-dasharray="339.29" stroke-dashoffset="339.29" id="heroRingFill"/>
+          </svg>
+          <div class="prog-ring-inner">
+            <div>
+              <div class="prog-ring-val"><span id="heroRingPct">0</span><span style="font-size:18px;color:var(--text-muted)">%</span></div>
+              <div class="prog-ring-label">Jornada</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="nav-tabs">
+        <button class="nav-tab active" onclick="trocarTab('mapa', this)">🗺 Mapa do Tesouro</button>
+        <button class="nav-tab" onclick="trocarTab('fase1', this)">⚡ Fase 1 · Entregas</button>
+      </div>
+
+      <!-- ABA: MAPA DO TESOURO -->
+      <div id="tabMapa">
+        <div class="mapa-header">
+          <div class="mapa-eyebrow">Linha do Tempo</div>
+          <h2 class="mapa-titulo">Mapa do Tesouro</h2>
+          <p class="mapa-sub">Sua jornada passo a passo — da chegada ao ecossistema completo em construção.</p>
+        </div>
+
+        <div id="mapaLoading" class="loading-wrap">
+          <div class="loading-spinner"></div>
+          <div class="loading-text">Carregando seu mapa...</div>
+        </div>
+        <div id="mapaContent" class="hidden">
+          <div class="timeline">
+            <div class="timeline-line"></div>
+            <!-- preenchido via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ABA: FASE 1 -->
+      <div id="tabFase1" class="hidden">
+        <div class="fase-header">
+          <div class="mapa-eyebrow">1 a 4 meses</div>
+          <h2 class="mapa-titulo">Fase 1 · Entregas</h2>
+          <p class="mapa-sub">Suas entregas por pilar. O status é atualizado pela equipe após validação.</p>
+        </div>
+
+        <div id="fase1Loading" class="loading-wrap hidden">
+          <div class="loading-spinner"></div>
+          <div class="loading-text">Carregando entregas...</div>
+        </div>
+
+        <!-- Progresso geral da fase 1 -->
+        <div class="fase-intro" id="fase1Intro" style="display:none">
+          <div class="fase-progresso-bar">
+            <div class="fase-progresso-label">Progresso geral — Fase 1</div>
+            <div class="fase-progresso-track"><div class="fase-progresso-fill" id="fase1Fill" style="width:0%"></div></div>
+          </div>
+          <div class="fase-progresso-pct"><span id="fase1Pct">0</span>%</div>
+        </div>
+
+        <div class="pilares-grid-fase" id="fase1Grid"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     MODAL CRIAR SENHA
+================================================================ -->
+<div id="modalCriarSenha" class="modal-overlay">
+  <div class="modal-box">
+    <h3 class="modal-titulo">Crie sua senha</h3>
+    <p class="modal-sub">Olá, <strong id="modalNome"></strong>! Defina uma senha para acessar sua jornada.</p>
+    <div id="msgModal"></div>
+    <div class="field">
+      <label>Nova senha</label>
+      <input type="password" id="modalSenha" placeholder="Mínimo 6 caracteres" minlength="6" autocomplete="new-password"/>
+      <div class="pw-strength"><div class="pw-bar" id="modalPwBar"></div></div>
+    </div>
+    <div class="field"><label>Confirmar</label><input type="password" id="modalConfirmar" placeholder="Repita a senha" autocomplete="new-password"/></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="salvarSenhaModal()">Criar senha e entrar</button>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// CONFIGURAÇÃO
+// ============================================================
+const SHEET_ID = '1oA4plua2nyy3UwHVgo5uxwThEbvcfddnxyzH93dnRlM';
+const APPS_SCRIPT_URL = ''; // Preencher após criar o Apps Script
+const MASTER_EMAIL = 'mentordelideres@gmail.com';
+const MASTER_SENHA = 'master2024';
+
+// URL base GViz
+const GV = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=`;
+
+let alunoAtual = null;
+let primeiroAcessoEmail = null;
+let mapaData = null;
+let fase1Data = null;
+
+// ============================================================
+// FRASES ROTATIVAS
+// ============================================================
+const FRASES = [
+    { texto: 'Liderar é, antes de tudo, conhecer-se. O resto vem do alinhamento entre essência e ação.', autor: 'Princípio da Mentoria' },
+    { texto: 'Grandes líderes não criam seguidores. Criam outros líderes.', autor: 'Mentor de Líderes' },
+    { texto: 'Antes de mover multidões, mova-se por dentro.', autor: 'Princípio da Mentoria' },
+    { texto: 'Sua história é sua maior credencial. Use-a com coragem.', autor: 'Mentor de Líderes' },
+    { texto: 'O autoconhecimento é o primeiro passo de toda liderança que dura.', autor: 'Princípio da Mentoria' },
+    { texto: 'Influência verdadeira nasce da autenticidade, não da performance.', autor: 'Mentor de Líderes' },
+    { texto: 'Quem lidera com propósito transforma não só resultados, mas vidas.', autor: 'Princípio da Mentoria' },
+];
+const frase = FRASES[Math.floor(Math.random() * FRASES.length)];
+document.getElementById('loginQuoteText').textContent = frase.texto;
+document.getElementById('loginQuoteAuthor').textContent = '— ' + frase.autor;
+
+// ============================================================
+// MAPA DO TESOURO — definição das 6 etapas
+// ============================================================
+const ETAPAS_MAPA = [
+    {
+        num: '01', data: '20/05 · 20h',
+        titulo: 'Onboarding ao vivo',
+        itens: [
+            'Apresentação dos 4 pilares e da metodologia da jornada',
+            'Apresentação da equipe especialista de cada pilar',
+            'Orientação sobre os 10 dias seguintes e os formulários',
+        ]
+    },
+    {
+        num: '02', data: '21–30/05',
+        titulo: 'Formulário de diagnóstico — Escada de Produtos',
+        itens: [
+            'Preenchido uma única vez — alimenta todos os pilares',
+            'Mapear produtos, modelo de receita e ticket médio',
+            'Estruturar os 4 degraus da escada de produtos',
+        ]
+    },
+    {
+        num: '03', data: '21–30/05',
+        titulo: '10 dias — Trilha de aulas na plataforma',
+        itens: [
+            'Assistir às 4 aulas (uma por pilar) na plataforma',
+            'Preencher formulário estratégico de cada pilar',
+            'Preencher briefing do livro (Pilar Livros)',
+        ]
+    },
+    {
+        num: '04', data: '29/05',
+        titulo: 'Evento Presencial na Holding',
+        itens: [
+            'Posicionamento e Autoridade nas Mídias Digitais',
+        ]
+    },
+    {
+        num: '05', data: '02/06 · início',
+        titulo: 'Início das tutorias com especialistas',
+        itens: [
+            'Especialistas disponíveis para tirar dúvidas por pilar',
+            'Validação dos formulários preenchidos pelo aluno',
+            'Alinhamento de expectativas e objetivos individuais',
+        ]
+    },
+    {
+        num: '06', data: 'a partir de 08/06',
+        titulo: 'Abertura de agenda — extração por pilar',
+        itens: [
+            'Cada especialista abre agenda individual para sessões',
+            'Livro · Mentoria · Posicionamento · Palestra',
+            'Atendimento direcionado para cada entregável do aluno',
+        ]
+    },
+];
+
+// ============================================================
+// FASE 1 — definição dos pilares e entregas
+// ============================================================
+const PILARES_FASE1 = [
+    {
+        nome: 'Performance Digital', icone: '📱',
+        col_prefix: 'PERF',
+        entregas: [
+            { label: 'Posicionamento e Autoridade nas Mídias Digitais', col: 'PERF_1' },
+            { label: 'Identidade e estrutura de comunicação digital', col: 'PERF_2' },
+            { label: 'Plano de Ação com projeção de 12 meses', col: 'PERF_3' },
+            { label: 'Estratégia de Podcast', col: 'PERF_4' },
+        ]
+    },
+    {
+        nome: 'Mentoria High Ticket', icone: '💼',
+        col_prefix: 'MENT',
+        entregas: [
+            { label: 'Estrutura e formato da Mentoria', col: 'MENT_1' },
+            { label: 'Precificação estratégica', col: 'MENT_2' },
+            { label: 'Direcionamento — Criação de oferta irresistível + página de vendas', col: 'MENT_3' },
+        ]
+    },
+    {
+        nome: 'Palestra', icone: '🎤',
+        col_prefix: 'PAL',
+        entregas: [
+            { label: 'Storytelling e narrativa', col: 'PAL_1' },
+            { label: 'Precificação: Como vender palestra e evento', col: 'PAL_2' },
+        ]
+    },
+    {
+        nome: 'Livro', icone: '📚',
+        col_prefix: 'LIVRO',
+        entregas: [
+            { label: 'Estrutura e tema central do livro', col: 'LIVRO_1' },
+        ]
+    },
+    {
+        nome: 'Eventos', icone: '🎯',
+        col_prefix: 'EVENTOS',
+        entregas: [
+            { label: 'Personal Branding', col: 'EVENTOS_1' },
+            { label: 'Formação Oradores e Palestrantes', col: 'EVENTOS_2' },
+            { label: 'Fórum de Palestrante', col: 'EVENTOS_3' },
+            { label: 'Posicionamento e Autoridade', col: 'EVENTOS_4' },
+        ]
+    },
+];
+
+// ============================================================
+// UTILITÁRIOS
+// ============================================================
+async function fetchSheet(sheetName) {
+    const url = `${GV}${encodeURIComponent(sheetName)}`;
+    const resp = await fetch(url);
+    const text = await resp.text();
+    const json = JSON.parse(text.substring(text.indexOf('{')).slice(0, -2));
+    return json.table.rows;
+}
+
+function showMsg(id, msg, tipo) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (!msg) { el.innerHTML = ''; return; }
+    el.innerHTML = `<div class="msg msg-${tipo}">${msg}</div>`;
+}
+
+function forcaSenha(senha) {
+    if (!senha) return { pct: 0, cls: '', txt: 'Digite uma senha' };
+    if (senha.length < 6) return { pct: 20, cls: 'strength-weak', txt: 'Muito curta' };
+    let pts = 0;
+    if (senha.length >= 8) pts++;
+    if (/[a-z]/.test(senha)) pts++;
+    if (/[A-Z]/.test(senha)) pts++;
+    if (/[0-9]/.test(senha)) pts++;
+    if (pts <= 1) return { pct: 40, cls: 'strength-weak', txt: 'Fraca' };
+    if (pts <= 2) return { pct: 70, cls: 'strength-medium', txt: 'Média' };
+    return { pct: 100, cls: 'strength-strong', txt: '✓ Forte' };
+}
+
+function mostrarTela(id) {
+    ['loginScreen','criarSenhaScreen','dashJornada'].forEach(t => {
+        const el = document.getElementById(t);
+        if (el) el.classList.add('hidden');
+    });
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('hidden');
+}
+
+function trocarTab(tab, btn) {
+    document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tabMapa').classList.toggle('hidden', tab !== 'mapa');
+    document.getElementById('tabFase1').classList.toggle('hidden', tab !== 'fase1');
+    if (tab === 'fase1') renderizarFase1();
+}
+
+// ============================================================
+// AUTENTICAÇÃO
+// ============================================================
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('emailInput').value.toLowerCase().trim();
+    const senha = document.getElementById('senhaInput').value.trim();
+    const btn = document.getElementById('btnLogin');
+
+    btn.disabled = true; btn.textContent = 'Verificando...';
+    showMsg('msgLogin', '', '');
+
+    try {
+        if (email === MASTER_EMAIL && senha === MASTER_SENHA) {
+            alert('Acesso master — use o dashboard principal para administração.');
+            btn.disabled = false; btn.innerHTML = 'Entrar na jornada <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>';
+            return;
+        }
+
+        const rows = await fetchSheet('ALUNOS');
+        let encontrado = null;
+
+        for (const row of rows) {
+            if (!row.c || !row.c[1]) continue;
+            const emailPlanilha = (row.c[1].v || '').toLowerCase().trim();
+            if (emailPlanilha === '' || emailPlanilha === 'e-mail') continue;
+            if (emailPlanilha === email) {
+                const senhaPlani = (row.c[9]?.v || '').trim(); // coluna J (índice 9)
+                const nome = row.c[0]?.v || 'Aluno';
+                if (!senhaPlani) {
+                    // Primeiro acesso
+                    primeiroAcessoEmail = email;
+                    document.getElementById('nomeAlunoCriar').textContent = nome.split(' ')[0];
+                    mostrarTela('criarSenhaScreen');
+                    return;
+                }
+                if (senhaPlani === senha) {
+                    encontrado = { nome, email, nomeExibicao: row.c[10]?.v || nome };
+                }
+                break;
+            }
+        }
+
+        if (!encontrado) {
+            showMsg('msgLogin', 'E-mail ou senha incorretos.', 'error');
+        } else {
+            alunoAtual = encontrado;
+            await iniciarDashboard();
+        }
+    } catch (err) {
+        console.error(err);
+        showMsg('msgLogin', 'Erro ao conectar. Verifique sua internet.', 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = 'Entrar na jornada <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>';
+    }
+});
+
+// Criar senha (primeiro acesso)
+document.getElementById('criarSenhaForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const nova = document.getElementById('novaSenhaInput').value;
+    const conf = document.getElementById('confirmarInput').value;
+    if (nova !== conf) { showMsg('msgCriar', 'As senhas não coincidem.', 'error'); return; }
+    if (nova.length < 6) { showMsg('msgCriar', 'Mínimo 6 caracteres.', 'error'); return; }
+    await salvarSenha(primeiroAcessoEmail, nova, 'msgCriar', 'btnCriar');
+});
+
+document.getElementById('novaSenhaInput').addEventListener('input', e => atualizarBarra(e.target.value, 'pwBar', 'pwText'));
+
+async function salvarSenha(email, senha, msgId, btnId) {
+    const btn = document.getElementById(btnId);
+    if (btn) { btn.disabled = true; btn.textContent = 'Salvando...'; }
+
+    try {
+        if (APPS_SCRIPT_URL) {
+            await fetch(APPS_SCRIPT_URL, {
+                method: 'POST', mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'salvarSenhaJornada', email, senha })
+            });
+        }
+        showMsg(msgId, '✓ Senha criada! Entrando...', 'success');
+
+        // Buscar nome do aluno e entrar
+        await new Promise(r => setTimeout(r, 3000));
+        const rows = await fetchSheet('ALUNOS');
+        for (const row of rows) {
+            if (!row.c || !row.c[1]) continue;
+            const ep = (row.c[1].v || '').toLowerCase().trim();
+            if (ep === email) {
+                alunoAtual = { nome: row.c[0].v || 'Aluno', email, nomeExibicao: row.c[10]?.v || row.c[0].v || 'Aluno' };
+                break;
+            }
+        }
+        if (alunoAtual) await iniciarDashboard();
+    } catch (err) {
+        showMsg(msgId, 'Erro ao salvar senha. Tente novamente.', 'error');
+    } finally {
+        if (btn) { btn.disabled = false; btn.textContent = 'Criar senha e entrar'; }
+    }
+}
+
+function atualizarBarra(senha, barId, txtId) {
+    const f = forcaSenha(senha);
+    const bar = document.getElementById(barId);
+    const txt = document.getElementById(txtId);
+    if (bar) { bar.style.width = f.pct + '%'; bar.className = 'pw-bar ' + f.cls; }
+    if (txt) txt.textContent = f.txt;
+}
+
+function mostrarEsqueci() {
+    showMsg('msgLogin', 'Entre em contato com a equipe Mentor de Líderes para redefinir sua senha.', 'info');
+}
+
+function logout() {
+    alunoAtual = null; mapaData = null; fase1Data = null;
+    mostrarTela('loginScreen');
+    document.getElementById('emailInput').value = '';
+    document.getElementById('senhaInput').value = '';
+}
+
+// ============================================================
+// INICIAR DASHBOARD
+// ============================================================
+async function iniciarDashboard() {
+    mostrarTela('dashJornada');
+
+    const nomeExib = alunoAtual.nomeExibicao || alunoAtual.nome;
+    const iniciais = nomeExib.split(' ').map(p => p[0]).slice(0, 2).join('').toUpperCase();
+
+    document.getElementById('topbarAvatar').textContent = iniciais;
+    document.getElementById('topbarNome').textContent = nomeExib.split(' ')[0];
+    document.getElementById('heroNome').textContent = nomeExib.split(' ')[0];
+    document.getElementById('heroEyebrow').textContent = 'Turma 3 · 2026';
+
+    // Carregar mapa do tesouro
+    await carregarMapaTesouro();
+}
+
+// ============================================================
+// MAPA DO TESOURO
+// ============================================================
+async function carregarMapaTesouro() {
+    document.getElementById('mapaLoading').classList.remove('hidden');
+    document.getElementById('mapaContent').classList.add('hidden');
+
+    try {
+        const rows = await fetchSheet('MAPA_TESOURO');
+        // Buscar linha do aluno (por email, coluna A)
+        let statusEtapas = Array(6).fill('Pendente');
+
+        for (const row of rows) {
+            if (!row.c || !row.c[0]) continue;
+            const ep = (row.c[0].v || '').toLowerCase().trim();
+            if (ep === alunoAtual.email) {
+                // Colunas B=etapa1 ... G=etapa6 (índices 1-6)
+                for (let i = 0; i < 6; i++) {
+                    statusEtapas[i] = row.c[i + 1]?.v || 'Pendente';
+                }
+                break;
+            }
+        }
+
+        mapaData = statusEtapas;
+        renderizarMapa(statusEtapas);
+        atualizarRingProgresso(statusEtapas);
+
+    } catch (err) {
+        console.error(err);
+        // Se MAPA_TESOURO vazia, renderizar com tudo pendente
+        mapaData = Array(6).fill('Pendente');
+        renderizarMapa(mapaData);
+        atualizarRingProgresso(mapaData);
+    } finally {
+        document.getElementById('mapaLoading').classList.add('hidden');
+        document.getElementById('mapaContent').classList.remove('hidden');
+    }
+}
+
+function statusClass(s) {
+    const m = { 'Concluído': 'concluido', 'Em andamento': 'andamento' };
+    return m[s] || 'pendente';
+}
+function statusPill(s) {
+    const m = {
+        'Concluído': '<span class="pill pill-success">✓ Concluído</span>',
+        'Em andamento': '<span class="pill pill-royal">● Em andamento</span>',
+        'Pendente': '<span class="pill pill-muted">○ Pendente</span>',
+    };
+    return m[s] || m['Pendente'];
+}
+
+function renderizarMapa(statusEtapas) {
+    const timeline = document.querySelector('.timeline');
+    // Limpar exceto a linha
+    Array.from(timeline.children).forEach(c => {
+        if (!c.classList.contains('timeline-line')) c.remove();
+    });
+
+    ETAPAS_MAPA.forEach((etapa, i) => {
+        const st = statusClass(statusEtapas[i]);
+        const delay = i * 0.08;
+
+        // Item principal
+        const item = document.createElement('div');
+        item.className = 'timeline-item';
+        item.style.animationDelay = delay + 's';
+        item.innerHTML = `
+            <div class="timeline-dot ${st}">${etapa.num}</div>
+            <div class="timeline-card ${st}">
+                <div class="timeline-meta">
+                    <span class="timeline-num">ETAPA ${etapa.num}</span>
+                    ${statusPill(statusEtapas[i])}
+                    <span class="timeline-date">${etapa.data}</span>
+                </div>
+                <div class="timeline-title">${etapa.titulo}</div>
+                <ul class="timeline-items">
+                    ${etapa.itens.map(it => `<li>${it}</li>`).join('')}
+                </ul>
+            </div>
+        `;
+        timeline.appendChild(item);
+
+        // Seta entre itens (exceto o último)
+        if (i < ETAPAS_MAPA.length - 1) {
+            const arrow = document.createElement('div');
+            arrow.className = 'timeline-arrow';
+            arrow.innerHTML = '▼';
+            timeline.appendChild(arrow);
+        }
+    });
+
+    // Etapa final
+    const final = document.createElement('div');
+    final.style.animationDelay = '0.5s';
+    final.className = 'fade-in';
+    final.innerHTML = `
+        <div style="display:flex;align-items:center;justify-content:center;padding:8px 0 8px 28px;color:var(--gold);font-size:18px">▼</div>
+        <div class="timeline-final">
+            <div class="timeline-final-icon">🏆</div>
+            <div class="timeline-final-title">Ecossistema completo em construção</div>
+            <div class="timeline-final-desc">Livro · Mentoria High Ticket · Infoprodutos · Posicionamento · Palestra<br/>Todos os pilares conversando entre si e gerando monetização integrada</div>
+        </div>
+    `;
+    timeline.appendChild(final);
+}
+
+function atualizarRingProgresso(statusEtapas) {
+    const concluidos = statusEtapas.filter(s => s === 'Concluído').length;
+    const total = statusEtapas.length;
+    const pct = Math.round((concluidos / total) * 100);
+
+    const ring = document.getElementById('heroRingFill');
+    const pctEl = document.getElementById('heroRingPct');
+    if (ring) {
+        const c = 2 * Math.PI * 54;
+        ring.setAttribute('stroke-dasharray', c.toFixed(2));
+        setTimeout(() => ring.setAttribute('stroke-dashoffset', (c - (pct / 100) * c).toFixed(2)), 200);
+    }
+    if (pctEl) pctEl.textContent = pct;
+}
+
+// ============================================================
+// FASE 1
+// ============================================================
+async function renderizarFase1() {
+    if (fase1Data) { renderizarPilaresFase1(fase1Data); return; }
+
+    document.getElementById('fase1Loading').classList.remove('hidden');
+
+    try {
+        const rows = await fetchSheet('FASE 1');
+        let statusEntregas = {};
+
+        // Inicializar com Pendente
+        PILARES_FASE1.forEach(p => p.entregas.forEach(e => statusEntregas[e.col] = 'Pendente'));
+
+        // Buscar linha do aluno
+        for (const row of rows) {
+            if (!row.c || !row.c[0]) continue;
+            const ep = (row.c[0].v || '').toLowerCase().trim();
+            if (ep === alunoAtual.email) {
+                // Ler status de cada entrega (a planilha tem col B em diante)
+                let colIdx = 1;
+                PILARES_FASE1.forEach(p => {
+                    p.entregas.forEach(e => {
+                        statusEntregas[e.col] = row.c[colIdx]?.v || 'Pendente';
+                        colIdx++;
+                    });
+                });
+                break;
+            }
+        }
+
+        fase1Data = statusEntregas;
+        renderizarPilaresFase1(statusEntregas);
+
+    } catch (err) {
+        console.error(err);
+        let statusEntregas = {};
+        PILARES_FASE1.forEach(p => p.entregas.forEach(e => statusEntregas[e.col] = 'Pendente'));
+        fase1Data = statusEntregas;
+        renderizarPilaresFase1(statusEntregas);
+    } finally {
+        document.getElementById('fase1Loading').classList.add('hidden');
+    }
+}
+
+function pillStatus(s) {
+    const m = {
+        'Pendente': '<span class="pill pill-muted">○ Pendente</span>',
+        'Em andamento': '<span class="pill pill-warn">● Em andamento</span>',
+        'Entregue': '<span class="pill pill-royal">↑ Entregue</span>',
+        'Validado': '<span class="pill pill-success">✓ Validado</span>',
+    };
+    return m[s] || m['Pendente'];
+}
+
+function renderizarPilaresFase1(statusEntregas) {
+    // Calcular progresso geral
+    let total = 0, validados = 0;
+    PILARES_FASE1.forEach(p => p.entregas.forEach(e => {
+        total++;
+        if (statusEntregas[e.col] === 'Validado') validados++;
+    }));
+    const pct = total > 0 ? Math.round((validados / total) * 100) : 0;
+
+    const intro = document.getElementById('fase1Intro');
+    intro.style.display = 'flex';
+    document.getElementById('fase1Fill').style.width = pct + '%';
+    document.getElementById('fase1Pct').textContent = pct;
+
+    const grid = document.getElementById('fase1Grid');
+    grid.innerHTML = PILARES_FASE1.map((pilar, pi) => {
+        const total = pilar.entregas.length;
+        const validados = pilar.entregas.filter(e => statusEntregas[e.col] === 'Validado').length;
+        const pctPilar = Math.round((validados / total) * 100);
+
+        return `
+            <div class="pilar-card-fase fade-in" style="animation-delay:${pi * 0.1}s">
+                <div class="pilar-card-header">
+                    <span class="pilar-card-icon">${pilar.icone}</span>
+                    <span class="pilar-card-nome">${pilar.nome}</span>
+                    <span class="pilar-card-pct">${pctPilar}%</span>
+                </div>
+                <div class="entregas-list">
+                    ${pilar.entregas.map(e => `
+                        <div class="entrega-item">
+                            <span class="entrega-nome">${e.label}</span>
+                            <span class="entrega-status">${pillStatus(statusEntregas[e.col])}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+</script>
+</body>
+</html>
