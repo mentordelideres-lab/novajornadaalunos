@@ -214,6 +214,76 @@ button{cursor:pointer;font-family:var(--sans);}
 .loading-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;gap:16px;}
 .loading-spinner{width:40px;height:40px;border:3px solid var(--line-strong);border-top-color:var(--royal);border-radius:50%;animation:spin .8s linear infinite;}
 .loading-text{font-size:14px;color:var(--text-muted);}
+
+/* ============================================================
+   PAINEL MASTER
+   ============================================================ */
+.master-shell { padding-top:64px; min-height:100vh; }
+.master-content { max-width:1200px; margin:0 auto; padding:40px 32px 80px; }
+
+/* Header do painel */
+.master-header { margin-bottom:32px; }
+.master-eyebrow { font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:8px; }
+.master-titulo { font-family:var(--serif);font-size:36px;font-weight:400;letter-spacing:-.025em;margin-bottom:6px; }
+.master-sub { font-size:14px;color:var(--text-dim); }
+
+/* Badge do mentor */
+.mentor-badge { display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:99px;font-size:12px;font-weight:600;margin-bottom:24px; }
+.mentor-badge.master { background:rgba(201,169,110,.12);color:var(--gold);border:1px solid rgba(201,169,110,.3); }
+.mentor-badge.mentor { background:rgba(48,78,156,.12);color:#8aa6e8;border:1px solid rgba(48,78,156,.3); }
+
+/* Barra de busca */
+.master-search { display:flex;gap:12px;margin-bottom:24px; }
+.master-search input { flex:1;padding:11px 16px;border-radius:var(--r-md);background:var(--bg-2);border:1px solid var(--line-strong);color:var(--text);font-family:var(--sans);font-size:14px;outline:none;transition:all .2s; }
+.master-search input:focus { border-color:var(--royal);box-shadow:0 0 0 4px rgba(48,78,156,.12); }
+.master-search input::placeholder { color:var(--text-muted); }
+
+/* Lista de alunos */
+.alunos-lista { display:flex;flex-direction:column;gap:8px;margin-bottom:32px; }
+.aluno-row { display:flex;align-items:center;gap:16px;padding:14px 20px;background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r-md);cursor:pointer;transition:all .2s; }
+.aluno-row:hover { border-color:var(--line-strong);background:var(--bg-3);transform:translateX(4px); }
+.aluno-row.selected { border-color:var(--royal);background:rgba(48,78,156,.1); }
+.aluno-avatar { width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--royal),var(--royal-deep));display:grid;place-items:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0; }
+.aluno-nome { font-weight:500;flex:1;font-size:14px; }
+.aluno-email { font-size:12px;color:var(--text-muted); }
+.aluno-progresso { display:flex;align-items:center;gap:10px;flex-shrink:0; }
+.aluno-prog-bar { width:80px;height:6px;background:rgba(225,228,234,.06);border-radius:99px;overflow:hidden; }
+.aluno-prog-fill { height:100%;background:linear-gradient(90deg,var(--royal),var(--gold));border-radius:99px;transition:width .6s var(--ease); }
+.aluno-prog-pct { font-family:var(--mono);font-size:11px;color:var(--text-muted);min-width:28px; }
+
+/* Painel de edição */
+.editor-panel { background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r-xl);padding:32px;position:sticky;top:80px; }
+.editor-panel-vazio { display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;color:var(--text-muted);text-align:center;gap:12px; }
+.editor-aluno-nome { font-family:var(--serif);font-size:22px;font-weight:400;letter-spacing:-.01em;margin-bottom:4px; }
+.editor-aluno-email { font-size:12px;color:var(--text-muted);margin-bottom:24px; }
+
+/* Seção de edição */
+.editor-section { margin-bottom:28px; }
+.editor-section-label { font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--line); }
+.editor-field { display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line); }
+.editor-field:last-child { border-bottom:none; }
+.editor-field-label { font-size:13px;flex:1;color:var(--text-dim); }
+.editor-select { padding:6px 10px;border-radius:var(--r-sm);background:var(--bg-3);border:1px solid var(--line-strong);color:var(--text);font-family:var(--sans);font-size:12px;outline:none;cursor:pointer;transition:all .2s; }
+.editor-select:focus { border-color:var(--royal); }
+.editor-select.status-pendente { border-color:var(--line-strong);color:var(--text-muted); }
+.editor-select.status-andamento { border-color:rgba(212,168,90,.5);color:var(--warn); }
+.editor-select.status-entregue { border-color:rgba(48,78,156,.5);color:#8aa6e8; }
+.editor-select.status-validado, .editor-select.status-concluido { border-color:rgba(95,167,118,.5);color:var(--success); }
+
+.editor-save-btn { width:100%;padding:13px;background:var(--royal);color:#fff;border:none;border-radius:var(--r-md);font-family:var(--sans);font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px -4px rgba(48,78,156,.5);margin-top:20px; }
+.editor-save-btn:hover { background:var(--royal-soft);transform:translateY(-1px); }
+.editor-save-btn:disabled { opacity:.6;cursor:not-allowed;transform:none; }
+
+/* Layout master em 2 colunas */
+.master-grid { display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:start; }
+@media(max-width:900px) { .master-grid { grid-template-columns:1fr; } .editor-panel { position:static; } }
+
+/* Toast */
+#masterToast { position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:var(--r-md);font-size:13px;font-weight:500;color:#fff;transform:translateY(80px);opacity:0;transition:all .3s;z-index:999;pointer-events:none; }
+#masterToast.show { transform:translateY(0);opacity:1; }
+#masterToast.success { background:#5fa776; }
+#masterToast.error { background:#c87070; }
+
 </style>
 </head>
 <body>
@@ -265,6 +335,9 @@ button{cursor:pointer;font-family:var(--sans);}
         </button>
       </form>
       <div class="login-footer"><a onclick="mostrarEsqueci()">Esqueci minha senha</a></div>
+      <div style="margin-top:20px;text-align:center;padding-top:16px;border-top:1px solid var(--line)">
+        <a onclick="mostrarLoginMaster()" style="font-size:12px;color:var(--text-muted);cursor:pointer;letter-spacing:.03em">Sou da equipe →</a>
+      </div>
     </div>
   </div>
 </div>
@@ -761,6 +834,438 @@ function renderizarFase1(entregas) {
       </div>`;
   }).join('');
 }
+
+// ============================================================
+// CONFIGURAÇÃO DE MENTORES
+// ============================================================
+const MENTORES = {
+  'mentordelideres@febracis.com.br': { nome:'Master', pilar:'master', colunas:'all' },
+  'brunorocha@febracis.com.br':      { nome:'Bruno Rocha', pilar:'Performance Digital', colunas:[0,1,2,3] },
+  'anaagnes@febracis.com.br':        { nome:'Ana Agnes', pilar:'Mentoria High Ticket', colunas:[4,5,6] },
+  'michellecastro@febracis.com.br':  { nome:'Michelle Castro', pilar:'Palestra', colunas:[7,8] },
+  'luanarocha@febracis.com.br':      { nome:'Luana Rocha', pilar:'Livro', colunas:[9] },
+  'wilmakelly@febracis.com.br':      { nome:'Wilma Kelly', pilar:'Livro', colunas:[9] },
+};
+
+const ENTREGAS_LABELS = [
+  'Posicionamento e Autoridade nas Mídias',
+  'Identidade e comunicação digital',
+  'Plano de Ação 12 meses',
+  'Estratégia de Podcast',
+  'Estrutura e formato da Mentoria',
+  'Precificação estratégica',
+  'Oferta irresistível + página de vendas',
+  'Storytelling e narrativa',
+  'Precificação: Como vender palestra',
+  'Estrutura e tema central do livro',
+  'Personal Branding',
+  'Formação Oradores e Palestrantes',
+  'Fórum de Palestrante',
+  'Posicionamento e Autoridade',
+];
+
+const PILARES_GRUPOS = [
+  { nome:'Performance Digital', icone:'📱', indices:[0,1,2,3] },
+  { nome:'Mentoria High Ticket', icone:'💼', indices:[4,5,6] },
+  { nome:'Palestra',             icone:'🎤', indices:[7,8] },
+  { nome:'Livro',                icone:'📚', indices:[9] },
+  { nome:'Eventos',              icone:'🎯', indices:[10,11,12,13] },
+];
+
+const STATUS_MAPA    = ['Pendente','Em andamento','Concluído'];
+const STATUS_ENTREGA = ['Pendente','Em andamento','Entregue','Validado'];
+
+// ============================================================
+// ESTADO DO MASTER
+// ============================================================
+let masterAtual      = null;
+let todosAlunos      = [];
+let alunoAtualEditor = null;
+let dadosAlunoEditor = { mapa:[], fase1:[] };
+let alteracoesEditor = {};
+
+// ============================================================
+// LOGIN MASTER/MENTOR
+// ============================================================
+function mostrarLoginMaster() {
+  document.querySelector('.login-badge').textContent = '● Acesso da equipe';
+  document.querySelector('.login-h1').innerHTML = 'Olá,<br/><em>equipe.</em>';
+  document.querySelector('.login-lead').textContent = 'Acesse o painel de acompanhamento dos alunos.';
+  const small = document.querySelector('#loginForm small');
+  if (small) small.style.display = 'none';
+  document.getElementById('loginForm').onsubmit = submeterLoginMaster;
+}
+
+async function submeterLoginMaster(e) {
+  e.preventDefault();
+  const email = document.getElementById('emailInput').value.toLowerCase().trim();
+  const senha = document.getElementById('senhaInput').value.trim();
+  const btn   = document.getElementById('btnLogin');
+
+  if (!MENTORES[email]) {
+    showMsg('msgLogin','E-mail não autorizado como membro da equipe.','error');
+    return;
+  }
+  if (!senha) { showMsg('msgLogin','Digite sua senha.','error'); return; }
+
+  btn.disabled = true; btn.textContent = 'Verificando...';
+  showMsg('msgLogin','','');
+
+  try {
+    const res = await callScript({ action:'loginMentor', email, senha });
+    if (!res.ok) { showMsg('msgLogin', res.erro || 'Erro.', 'error'); return; }
+
+    if (res.primeiroAcesso) {
+      emailPrimeiroAcesso = email;
+      window._loginDestino = 'master';
+      document.getElementById('nomeCriar').textContent = MENTORES[email].nome.split(' ')[0];
+      mostrarTela('criarSenhaScreen');
+      return;
+    }
+    masterAtual = { email, ...MENTORES[email] };
+    iniciarPainelMaster();
+  } catch(err) {
+    showMsg('msgLogin','Erro de conexão.','error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Entrar <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>';
+  }
+}
+
+// Override do criarSenha para suportar mentor
+async function submeterCriarSenha(e) {
+  e.preventDefault();
+  const nova      = document.getElementById('novaSenhaInput').value;
+  const confirmar = document.getElementById('confirmarInput').value;
+  const btn       = document.getElementById('btnCriar');
+  if (nova !== confirmar) { showMsg('msgCriar','As senhas não coincidem.','error'); return; }
+  if (nova.length < 6)    { showMsg('msgCriar','Mínimo 6 caracteres.','error'); return; }
+  btn.disabled = true; btn.textContent = 'Salvando...';
+  showMsg('msgCriar','','');
+  try {
+    const isMentor = !!MENTORES[emailPrimeiroAcesso];
+    const action   = isMentor ? 'salvarSenhaMentor' : 'salvarSenha';
+    const res = await callScript({ action, email: emailPrimeiroAcesso, senha: nova });
+    if (!res.ok) { showMsg('msgCriar', res.erro || 'Erro.','error'); return; }
+    showMsg('msgCriar','✓ Senha criada! Entrando...','success');
+    if (isMentor) {
+      masterAtual = { email: emailPrimeiroAcesso, ...MENTORES[emailPrimeiroAcesso] };
+      setTimeout(() => iniciarPainelMaster(), 900);
+    } else {
+      const r = await callScript({ action:'login', email: emailPrimeiroAcesso, senha: nova });
+      if (r.ok) {
+        alunoAtual = { nome: r.nome, email: emailPrimeiroAcesso, arquetipo: r.arquetipo||'' };
+        setTimeout(() => iniciarDashboard(), 900);
+      }
+    }
+  } catch(err) {
+    showMsg('msgCriar','Erro ao salvar senha.','error');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Criar senha e entrar';
+  }
+}
+
+// ============================================================
+// INICIAR PAINEL MASTER
+// ============================================================
+function iniciarPainelMaster() {
+  mostrarTela('masterScreen');
+  const ini = masterAtual.nome.split(' ').map(p=>p[0]).slice(0,2).join('').toUpperCase();
+  document.getElementById('masterAvatar').textContent  = ini;
+  document.getElementById('masterNomeTop').textContent = masterAtual.nome.split(' ')[0];
+  const badge = document.getElementById('masterBadge');
+  if (masterAtual.colunas === 'all') {
+    badge.textContent = '★ Master — Acesso total';
+    badge.className   = 'mentor-badge master';
+  } else {
+    badge.textContent = '● ' + masterAtual.pilar;
+    badge.className   = 'mentor-badge mentor';
+  }
+  carregarAlunos();
+}
+
+async function carregarAlunos() {
+  document.getElementById('alunosLista').innerHTML =
+    '<div class="loading-wrap"><div class="loading-spinner"></div><div class="loading-text">Carregando alunos...</div></div>';
+  try {
+    const res = await callScript({ action:'getAlunos' });
+    if (!res.ok) throw new Error(res.erro);
+    todosAlunos = res.alunos;
+    renderizarLista(todosAlunos);
+  } catch(err) {
+    document.getElementById('alunosLista').innerHTML =
+      '<div style="color:var(--danger);padding:20px;text-align:center">Erro: '+err.message+'</div>';
+  }
+}
+
+function renderizarLista(alunos) {
+  const lista = document.getElementById('alunosLista');
+  if (!alunos.length) {
+    lista.innerHTML = '<div style="color:var(--text-muted);padding:20px;text-align:center">Nenhum aluno encontrado</div>';
+    return;
+  }
+  lista.innerHTML = alunos.map(a => {
+    const ini = a.nome.split(' ').map(p=>p[0]).slice(0,2).join('').toUpperCase();
+    const pct = Math.round((a.validados/14)*100);
+    const emailSafe = a.email.replace(/'/g,"\'");
+    return `
+      <div class="aluno-row" onclick="selecionarAluno('${emailSafe}')" data-email="${emailSafe}">
+        <div class="aluno-avatar">${ini}</div>
+        <div style="flex:1;min-width:0">
+          <div class="aluno-nome">${a.nome}</div>
+          <div class="aluno-email">${a.email}</div>
+        </div>
+        <div class="aluno-progresso">
+          <div class="aluno-prog-bar"><div class="aluno-prog-fill" style="width:${pct}%"></div></div>
+          <span class="aluno-prog-pct">${pct}%</span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function filtrarAlunos(termo) {
+  const t = (termo||'').toLowerCase().trim();
+  const f = t ? todosAlunos.filter(a => a.nome.toLowerCase().includes(t) || a.email.toLowerCase().includes(t)) : todosAlunos;
+  renderizarLista(f);
+  // Reanexar seleção do atual
+  if (alunoAtualEditor) {
+    document.querySelectorAll('.aluno-row').forEach(r => {
+      if (r.dataset.email === alunoAtualEditor.email) r.classList.add('selected');
+    });
+  }
+}
+
+async function selecionarAluno(email) {
+  document.querySelectorAll('.aluno-row').forEach(r => r.classList.remove('selected'));
+  const row = document.querySelector(`.aluno-row[data-email="${email}"]`);
+  if (row) row.classList.add('selected');
+
+  alunoAtualEditor = todosAlunos.find(a => a.email === email);
+  alteracoesEditor = {};
+  document.getElementById('editorVazio').classList.add('hidden');
+  document.getElementById('editorConteudo').classList.remove('hidden');
+  document.getElementById('editorConteudo').innerHTML =
+    '<div class="loading-wrap" style="padding:40px"><div class="loading-spinner"></div></div>';
+
+  try {
+    const [resMapa, resFase] = await Promise.all([
+      callScript({ action:'getMapa',  email }),
+      callScript({ action:'getFase1', email })
+    ]);
+    dadosAlunoEditor.mapa  = resMapa.ok  ? resMapa.etapas   : Array(6).fill('Pendente');
+    dadosAlunoEditor.fase1 = resFase.ok  ? resFase.entregas : Array(14).fill('Pendente');
+    renderizarEditor();
+  } catch(err) {
+    document.getElementById('editorConteudo').innerHTML =
+      '<div style="color:var(--danger);padding:20px">Erro: '+err.message+'</div>';
+  }
+}
+
+function statusClass(s) {
+  if (s==='Concluído'||s==='Validado') return 'status-validado';
+  if (s==='Entregue') return 'status-entregue';
+  if (s==='Em andamento') return 'status-andamento';
+  return 'status-pendente';
+}
+
+function renderizarEditor() {
+  const isMaster = masterAtual.colunas === 'all';
+  const colunas  = masterAtual.colunas;
+  const mapaEtapas = [
+    'Onboarding ao vivo','Formulário diagnóstico','10 dias de aulas',
+    'Evento presencial','Início das tutorias','Abertura de agenda'
+  ];
+
+  // Mapa — só master
+  let mapaHtml = '';
+  if (isMaster) {
+    mapaHtml = '<div class="editor-section"><div class="editor-section-label">🗺 Mapa do Tesouro</div>';
+    mapaEtapas.forEach((label, i) => {
+      const st = dadosAlunoEditor.mapa[i] || 'Pendente';
+      mapaHtml += `
+        <div class="editor-field">
+          <span class="editor-field-label">${String(i+1).padStart(2,'0')} · ${label}</span>
+          <select class="editor-select ${statusClass(st)}" onchange="registrarAlteracao('mapa',${i},this.value,this)">
+            ${STATUS_MAPA.map(s=>`<option value="${s}"${st===s?' selected':''}>${s}</option>`).join('')}
+          </select>
+        </div>`;
+    });
+    mapaHtml += '</div>';
+  }
+
+  // Fase 1
+  let fase1Html = '';
+  PILARES_GRUPOS.forEach(grupo => {
+    const visv = isMaster ? grupo.indices : grupo.indices.filter(i => colunas.includes(i));
+    if (!visv.length) return;
+    fase1Html += `<div class="editor-section"><div class="editor-section-label">${grupo.icone} ${grupo.nome}</div>`;
+    visv.forEach(i => {
+      const st = dadosAlunoEditor.fase1[i] || 'Pendente';
+      fase1Html += `
+        <div class="editor-field">
+          <span class="editor-field-label">${ENTREGAS_LABELS[i]}</span>
+          <select class="editor-select ${statusClass(st)}" onchange="registrarAlteracao('fase1',${i},this.value,this)">
+            ${STATUS_ENTREGA.map(s=>`<option value="${s}"${st===s?' selected':''}>${s}</option>`).join('')}
+          </select>
+        </div>`;
+    });
+    fase1Html += '</div>';
+  });
+
+  document.getElementById('editorConteudo').innerHTML = `
+    <div class="editor-aluno-nome">${alunoAtualEditor.nome}</div>
+    <div class="editor-aluno-email">${alunoAtualEditor.email}</div>
+    ${mapaHtml}
+    ${fase1Html}
+    <button class="editor-save-btn" id="editorSaveBtn" onclick="salvarAlteracoes()">Salvar alterações</button>
+    <div id="editorMsg" style="margin-top:12px"></div>`;
+}
+
+function registrarAlteracao(tipo, idx, valor, sel) {
+  if (!alteracoesEditor[tipo]) alteracoesEditor[tipo] = {};
+  alteracoesEditor[tipo][idx] = valor;
+  sel.className = 'editor-select ' + statusClass(valor);
+}
+
+async function salvarAlteracoes() {
+  if (!Object.keys(alteracoesEditor).length) {
+    mostrarToast('Nenhuma alteração para salvar.','error'); return;
+  }
+  const btn = document.getElementById('editorSaveBtn');
+  btn.disabled = true; btn.textContent = 'Salvando...';
+  try {
+    const mapaFinal  = alteracoesEditor.mapa
+      ? dadosAlunoEditor.mapa.map((v,i) => alteracoesEditor.mapa[i] !== undefined ? alteracoesEditor.mapa[i] : v)
+      : null;
+    const fase1Final = alteracoesEditor.fase1
+      ? dadosAlunoEditor.fase1.map((v,i) => alteracoesEditor.fase1[i] !== undefined ? alteracoesEditor.fase1[i] : v)
+      : null;
+
+    const res = await callScript({
+      action: 'salvarAluno',
+      email:  alunoAtualEditor.email,
+      mapa:   mapaFinal,
+      fase1:  fase1Final,
+      pilar:  masterAtual.colunas === 'all' ? 'all' : masterAtual.pilar,
+    });
+    if (!res.ok) throw new Error(res.erro);
+
+    if (mapaFinal)  dadosAlunoEditor.mapa  = mapaFinal;
+    if (fase1Final) dadosAlunoEditor.fase1 = fase1Final;
+    alteracoesEditor = {};
+
+    // Atualizar barra de progresso na lista
+    const validados = dadosAlunoEditor.fase1.filter(s=>s==='Validado').length;
+    const a = todosAlunos.find(x=>x.email===alunoAtualEditor.email);
+    if (a) {
+      a.validados = validados;
+      const pct = Math.round((validados/14)*100);
+      const row = document.querySelector(`.aluno-row[data-email="${alunoAtualEditor.email}"]`);
+      if (row) {
+        row.querySelector('.aluno-prog-fill').style.width = pct+'%';
+        row.querySelector('.aluno-prog-pct').textContent  = pct+'%';
+      }
+    }
+    mostrarToast('Salvo com sucesso! ✓','success');
+  } catch(err) {
+    mostrarToast('Erro: '+err.message,'error');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Salvar alterações';
+  }
+}
+
+function mostrarToast(msg, tipo) {
+  const t = document.getElementById('masterToast');
+  t.textContent = msg;
+  t.className = tipo + ' show';
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function logoutMaster() {
+  masterAtual = null; todosAlunos = []; alunoAtualEditor = null;
+  document.querySelector('.login-badge').textContent = '● Turma 03 · Jornada 2026';
+  document.querySelector('.login-h1').innerHTML = 'Bem-vindo,<br/><em>líder.</em>';
+  document.querySelector('.login-lead').textContent = 'Acesse sua jornada personalizada.';
+  const small = document.querySelector('#loginForm small');
+  if (small) small.style.display = '';
+  document.getElementById('loginForm').onsubmit = submeterLogin;
+  document.getElementById('emailInput').value = '';
+  document.getElementById('senhaInput').value = '';
+  mostrarTela('loginScreen');
+}
+
 </script>
+
+<!-- ============================================================
+     PAINEL MASTER / MENTOR
+     ============================================================ -->
+<div id="masterScreen" class="hidden">
+
+  <!-- Topbar (reutiliza o mesmo) -->
+  <header class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-logo">
+        <img src="lion-logo.png" alt="" onerror="this.style.display='none';var s=document.createElement('span');s.className='lion-fallback';s.textContent='🦁';this.parentElement.appendChild(s)"/>
+      </div>
+      <div>
+        <div class="topbar-brand-name">Mentor de Líderes</div>
+        <div class="topbar-brand-sub">Painel da Equipe · Turma 3</div>
+      </div>
+    </div>
+    <div class="topbar-user">
+      <div class="topbar-avatar" id="masterAvatar">?</div>
+      <div class="topbar-name" id="masterNomeTop"></div>
+      <button class="topbar-logout" onclick="logoutMaster()">Sair</button>
+    </div>
+  </header>
+
+  <div class="master-shell">
+    <div class="master-content">
+
+      <div class="master-header">
+        <div class="master-eyebrow">Painel da Equipe</div>
+        <h1 class="master-titulo">Acompanhamento de Alunos</h1>
+        <p class="master-sub">Selecione um aluno para atualizar o progresso das entregas.</p>
+      </div>
+
+      <div id="masterBadge" class="mentor-badge master">● Master — Acesso total</div>
+
+      <div class="master-search">
+        <input type="text" id="masterSearch" placeholder="Buscar aluno pelo nome..." oninput="filtrarAlunos(this.value)"/>
+      </div>
+
+      <div class="master-grid">
+        <!-- Lista de alunos -->
+        <div>
+          <div class="alunos-lista" id="alunosLista">
+            <div class="loading-wrap"><div class="loading-spinner"></div><div class="loading-text">Carregando alunos...</div></div>
+          </div>
+        </div>
+
+        <!-- Painel de edição -->
+        <div class="editor-panel" id="editorPanel">
+          <div class="editor-panel-vazio" id="editorVazio">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".3"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            <div style="font-size:15px;font-weight:500">Selecione um aluno</div>
+            <div style="font-size:13px">para editar o progresso</div>
+          </div>
+          <div id="editorConteudo" class="hidden"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="masterToast"></div>
+
+<!-- Login Master (tela separada dentro do login normal) -->
+<div id="loginMasterLink" style="margin-top:24px;text-align:center;border-top:1px solid var(--line);padding-top:16px;display:none">
+  <a onclick="mostrarLoginMaster()" style="font-size:12px;color:var(--text-muted);cursor:pointer;letter-spacing:.05em">
+    Acesso da equipe →
+  </a>
+</div>
+
 </body>
 </html>
