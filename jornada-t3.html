@@ -802,25 +802,33 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
             return;
         }
 
-        const rows = await fetchSheet('ALUNOS');
+        // Autenticação via aba TURMA 3
+        // Colunas: A=Nome, B=Email, C=Turma, D-I=Formulários, J=Senha, K=Nome Preferido, L=Arquétipo
+        const rows = await fetchSheet('TURMA 3');
         let encontrado = null;
 
         for (const row of rows) {
             if (!row.c || !row.c[1]) continue;
             const emailPlanilha = (row.c[1].v || '').toLowerCase().trim();
-            if (emailPlanilha === '' || emailPlanilha === 'e-mail') continue;
+            if (emailPlanilha === '' || emailPlanilha === 'e-mail' || emailPlanilha === 'e-mail') continue;
             if (emailPlanilha === email) {
-                const senhaPlani = (row.c[9]?.v || '').trim(); // coluna J (índice 9)
+                const senhaPlani = (row.c[9]?.v || '').trim(); // coluna J = Senha
                 const nome = row.c[0]?.v || 'Aluno';
+                const nomePreferido = row.c[10]?.v || '';      // coluna K = Nome Preferido
                 if (!senhaPlani) {
                     // Primeiro acesso
                     primeiroAcessoEmail = email;
-                    document.getElementById('nomeAlunoCriar').textContent = nome.split(' ')[0];
+                    document.getElementById('nomeAlunoCriar').textContent = (nomePreferido || nome).split(' ')[0];
                     mostrarTela('criarSenhaScreen');
                     return;
                 }
                 if (senhaPlani === senha) {
-                    encontrado = { nome, email, nomeExibicao: row.c[10]?.v || nome };
+                    encontrado = {
+                        nome,
+                        email,
+                        nomeExibicao: nomePreferido || nome,
+                        arquetipo: row.c[11]?.v || ''  // coluna L = Arquétipo
+                    };
                 }
                 break;
             }
@@ -867,14 +875,16 @@ async function salvarSenha(email, senha, msgId, btnId) {
         }
         showMsg(msgId, '✓ Senha criada! Entrando...', 'success');
 
-        // Buscar nome do aluno e entrar
+        // Buscar nome na aba TURMA 3 e entrar
         await new Promise(r => setTimeout(r, 3000));
-        const rows = await fetchSheet('ALUNOS');
-        for (const row of rows) {
+        const rows2 = await fetchSheet('TURMA 3');
+        for (const row of rows2) {
             if (!row.c || !row.c[1]) continue;
             const ep = (row.c[1].v || '').toLowerCase().trim();
             if (ep === email) {
-                alunoAtual = { nome: row.c[0].v || 'Aluno', email, nomeExibicao: row.c[10]?.v || row.c[0].v || 'Aluno' };
+                const nome = row.c[0]?.v || 'Aluno';
+                const nomePreferido = row.c[10]?.v || '';
+                alunoAtual = { nome, email, nomeExibicao: nomePreferido || nome, arquetipo: row.c[11]?.v || '' };
                 break;
             }
         }
